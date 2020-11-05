@@ -51,6 +51,50 @@ def Tseitin(A, letrasProposicionalesA):
     assert(not bool(set(letrasProposicionalesA) & set(letrasProposicionalesB))), u"¡Hay letras proposicionales en común!"
 
     #  IMPLEMENTAR AQUI ALGORITMO TSEITIN
+    L=[] #inicializamos lista de cconjunciones
+    Pila=[] #iniciamos pila
+    i=-1 #contador de variabes nuevas
+    s=[0] #inicializamos símbolo de trabajo
+    
+    while len(A)>0:
+       if s is letrasProposicionalesA and len(Pila) != 0 and Pila[-1] == '-':
+           i +=1
+           letrasProposicionalesA=letrasProposicionalesB[i]
+           Pila=Pila[:-1]
+           Pila.append(letrasProposicionalesA)
+           L.append((letrasProposicionalesA + '<->' + '-'+ s))
+           A=A[1:]
+           if len(A) > 0:
+               s=A[0]
+       elif s==')':
+            w=Pila[-1]
+            u=Pila[-2]
+            v=Pila[-3]
+            Pila=Pila[:len(Pila)-4]
+            i += 1
+            letrasProposicionalesA=letrasProposicionalesB[i]
+            L.append((letrasProposicionalesA+'<->'+(v+u+w)))
+            s=letrasProposicionalesA
+       else:
+            Pila.append(s)
+            A=A[1:]
+            if len(A) > 0:
+                s=A[0]
+    B=''
+    if i<0:
+        letrasProposicionalesA=Pila[-1]
+    else:
+        letrasProposicionalesA=letrasProposicionalesB[i]
+    
+    for X in L:
+        Y=enFNC(X)
+        B +='&'+Y
+        
+    B=letrasProposicionalesA + B
+    B=letrasProposicionalesA + B
+    return B
+       
+    
     pass
 
 # Subrutina Clausula para obtener lista de literales
